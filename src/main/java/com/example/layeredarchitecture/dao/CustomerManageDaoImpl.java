@@ -6,8 +6,8 @@ import com.example.layeredarchitecture.model.CustomerDTO;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class CustomerManageDao {
-
+public class CustomerManageDaoImpl implements CustomerDAO{
+@Override
     public ArrayList<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException {
 
         Connection connection = DBConnection.getDbConnection().getConnection();
@@ -28,6 +28,7 @@ public class CustomerManageDao {
         return allCustomers;
     }
 
+    @Override
     public boolean saveCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("INSERT INTO Customer (id,name, address) VALUES (?,?,?)");
@@ -47,7 +48,7 @@ public class CustomerManageDao {
 
         return pstm.executeUpdate()>0;
     }
-
+@Override
     public boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
 
         Connection connection = DBConnection.getDbConnection().getConnection();
@@ -55,7 +56,7 @@ public class CustomerManageDao {
         pstm.setString(1, id);
         return pstm.executeQuery().next();
     }
-
+@Override
     public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
 
         Connection connection = DBConnection.getDbConnection().getConnection();
@@ -64,7 +65,7 @@ public class CustomerManageDao {
         return pstm.executeUpdate()>0;
 
     }
-
+@Override
     public String generateNextId() throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         ResultSet rst = connection.createStatement().executeQuery("SELECT id FROM Customer ORDER BY id DESC LIMIT 1;");

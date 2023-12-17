@@ -1,7 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.dao.CustomerManageDao;
-import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.dao.CustomerDAO;
+import com.example.layeredarchitecture.dao.CustomerManageDaoImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.jfoenix.controls.JFXButton;
@@ -38,6 +38,8 @@ public class ManageCustomersFormController {
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
 
+    CustomerDAO customerManageDao = new CustomerManageDaoImpl();
+
     public void initialize() {
 
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -70,7 +72,7 @@ public class ManageCustomersFormController {
         tblCustomers.getItems().clear();
         /*Get all customers*/
         try {
-            var customerManageDao = new CustomerManageDao();
+            var customerManageDao = new CustomerManageDaoImpl();
 
             ArrayList<CustomerDTO> allCustomers = customerManageDao.getAllCustomers();
 
@@ -149,8 +151,6 @@ public class ManageCustomersFormController {
                     new Alert(Alert.AlertType.ERROR, id + " already exists").show();
                 }
 
-                CustomerManageDao customerManageDao = new CustomerManageDao();
-
                 CustomerDTO customerDTO = new CustomerDTO(id,name,address);
 
                 var isSaved = customerManageDao.saveCustomer(customerDTO);
@@ -173,11 +173,10 @@ public class ManageCustomersFormController {
                     new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
                 }
 
-                var dao = new CustomerManageDao();
 
                 var customerDTO = new CustomerDTO(id,name,address);
 
-                var isUpdated = dao.updateCustomer(customerDTO);
+                var isUpdated = customerManageDao.updateCustomer(customerDTO);
 
 
 
@@ -199,8 +198,6 @@ public class ManageCustomersFormController {
 
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
 
-        var customerManageDao = new CustomerManageDao();
-
         return customerManageDao.existCustomer(id);
 
     }
@@ -212,8 +209,6 @@ public class ManageCustomersFormController {
             if (!existCustomer(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }
-
-            CustomerManageDao customerManageDao = new CustomerManageDao();
 
             var isDeleted = customerManageDao.deleteCustomer(id);
 
@@ -232,8 +227,7 @@ public class ManageCustomersFormController {
     private String generateNewId() {
         try {
 
-            var manageDao = new CustomerManageDao();
-            return manageDao.generateNextId();
+            return customerManageDao.generateNextId();
 
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new id " + e.getMessage()).show();
