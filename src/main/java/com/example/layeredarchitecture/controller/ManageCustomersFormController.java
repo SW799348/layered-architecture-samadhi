@@ -1,7 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.dao.CustomerDAO;
-import com.example.layeredarchitecture.dao.CustomerManageDaoImpl;
+import com.example.layeredarchitecture.dao.CustomerDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.jfoenix.controls.JFXButton;
@@ -38,7 +38,7 @@ public class ManageCustomersFormController {
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
 
-    CustomerDAO customerManageDao = new CustomerManageDaoImpl();
+    CustomerDAO customerManageDao = new CustomerDAOImpl();
 
     public void initialize() {
 
@@ -72,7 +72,7 @@ public class ManageCustomersFormController {
         tblCustomers.getItems().clear();
         /*Get all customers*/
         try {
-            var customerManageDao = new CustomerManageDaoImpl();
+            var customerManageDao = new CustomerDAOImpl();
 
             ArrayList<CustomerDTO> allCustomers = customerManageDao.getAllCustomers();
 
